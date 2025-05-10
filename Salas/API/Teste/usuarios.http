@@ -1,0 +1,25 @@
+@url_base = http://localhost:5000/api
+
+### 1. Testar conexão básica (sem autenticação)
+GET {{url_base}}/test/ping
+
+### REGISTRAR USUARIO ADM
+POST {{url_base}}/usuarios/registrar
+Content-Type: application/json
+
+{
+    "Nome": "User1",
+    "Email": "user1@email.com",
+    "Senha": "user123",
+    "Role": "User"
+}
+
+### LOGIN
+
+POST {{url_base}}/auth/login
+Content-Type: application/json
+
+{
+    "Email": "user21@email.com",
+    "Senha": "user123"
+}
