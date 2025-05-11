@@ -9,8 +9,8 @@ Content-Type: application/json
 
 {
     "Nome": "Usuario1",
-    "Email": "usuario@email.com",
-    "Senha": "usuario",
+    "Email": "123@email.com",
+    "Senha": "123",
     "Role": "Admin"
 }
 
@@ -20,6 +20,6 @@ POST {{url_base}}/auth/login
 Content-Type: application/json
 
 {
-    "Email": "usuario@email.com",
-    "Senha": "usuario"
+    "Email": "123@email.com",
+    "Senha": "123"
 }
