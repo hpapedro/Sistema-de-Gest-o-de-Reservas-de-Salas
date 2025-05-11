@@ -10,4 +10,6 @@ public class AppDbContext : DbContext
     public DbSet<Reserva> Reservas {get; set;}
     public DbSet<Auditoria> Auditorias {get; set;}
 
+    
+
 }
