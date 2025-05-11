@@ -7,19 +7,11 @@ GET {{url_base}}/salas/listar
 
 ### 2. Criar sala (EXIGE TOKEN ADMIN)
 POST {{url_base}}/salas/registrar
-<<<<<<< HEAD
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFkbWluQGVtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMyIsImV4cCI6MTc0NzAwNzQ1MSwiaXNzIjoiUmVzZXJ2YVNhbGFzQVBJIiwiYXVkIjoiVXN1YXJpb0FQSSJ9.UDUgmhJ_I_zTySUSlrKLkG4o_3uxPMbNFSj694ikrpE
-Content-Type: application/json
-
-{
-    "Nome": "Sala Normal 117",
-=======
 Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
-    "Nome": "Sala Normal 1",
->>>>>>> 1952537c749eb3fa0d66037598710cbe9cc47d8f
+    "Nome": "Sala Normal 5",
     "Capacidade": 12
 }
 
@@ -38,5 +30,5 @@ GET {{url_base}}/salas/2
 Authorization: Bearer {{adminToken}}
 
 ### 3. Deletar sala (EXIGE TOKEN ADMIN)
-DELETE {{url_base}}/salas/remover/1
+DELETE {{url_base}}/salas/remover/2
 Authorization: Bearer {{adminToken}}

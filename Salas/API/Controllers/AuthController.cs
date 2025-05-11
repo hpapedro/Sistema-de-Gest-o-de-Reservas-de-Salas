@@ -29,30 +29,6 @@ public class AuthController : ControllerBase
             nome = usuario.Nome,
             role = usuario.Role,
             token
-        });
-        
-    }
-
-    private string GenerateToken(Usuario usuario){
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.Name, usuario.Nome),
-            new Claim(ClaimTypes.Role, usuario.Role),
-            new Claim(ClaimTypes.Email, usuario.Email),
-            new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString())
-        };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddHours(2),
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
+        });
+    }
 }
