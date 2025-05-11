@@ -29,16 +29,12 @@ public class AuthController : ControllerBase{
         if (usuario.Senha != usuarioLogin.Senha)
             return Unauthorized("Senha incorreta");
 
-        if (usuario.Role == "Admin")
-        {
             var token = GenerateToken(usuario);
-            return Ok(new { token});
-        }
 
         return Ok(new {
             message = "Login Bem sucedido",
-            role = usuario.Role
-            
+            role = usuario.Role,
+            token
         });
         
     }

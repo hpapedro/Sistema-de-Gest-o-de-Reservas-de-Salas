@@ -1,10 +1,13 @@
 using API.data;
+using API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ISalaRepository, SalaRepository>();
 
 //banco de dados
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

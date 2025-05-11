@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Properties/" />
-    <Folder Include="Repositories/" />
+    <Folder Include="Repositories\" />
     <Folder Include="Services/" />
   </ItemGroup>
 

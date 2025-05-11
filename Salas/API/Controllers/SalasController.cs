@@ -1,4 +1,5 @@
 using API.data;
+using API.Data;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -10,70 +11,68 @@ using Microsoft.EntityFrameworkCore;
 [ApiController]
 [Authorize]
 public class SalasController : ControllerBase{
-    private readonly AppDbContext _context;
 
-    public SalasController(AppDbContext context){
-        _context = context;
+    private readonly ISalaRepository _repository;
+    public SalasController(ISalaRepository repository){
+        _repository = repository;
     }
 
     [HttpGet("listar")]
     [AllowAnonymous]
-    public async Task<ActionResult<List<Sala>>> ListarSalas(){
-        return await _context.Salas.ToListAsync();
+    public ActionResult <List<Sala>> ListarSalas(){
+        var todasAsSalas = _repository.ListarTodas();
+        return Ok(todasAsSalas);
     }
 
     [HttpPost("registrar")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<Sala>> RegistrarSala([FromBody] Sala sala){
-        if (await _context.Salas.AnyAsync(s => s.Nome == sala.Nome))
+    public ActionResult<Sala> RegistrarSala([FromBody] Sala sala){
+        if (_repository.VerificarSeNomeExiste(sala.Nome))
             return Conflict("Já existe uma sala com este nome");
         
         if (sala.Capacidade <= 0)
             return BadRequest("Capacidade deve ser maior que zero");
 
-        _context.Salas.Add(sala);
-        await _context.SaveChangesAsync();
+        _repository.Adicionar(sala);
         return CreatedAtAction(nameof(ListarSalas), new {id = sala.Id}, sala);
-
     }
 
     [HttpPut("editar/{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> EditarSala(int id, [FromBody] Sala salaAtualizada){
-        var sala = await _context.Salas.FindAsync(id);
-        if (sala == null)
+    public IActionResult EditarSala(int id, [FromBody] Sala salaAtualizada){
+        var salaExistente =  _repository.BuscarPorId(id);
+        if (salaExistente == null)
             return NotFound("Sala não Encontrada");
         
         if (salaAtualizada.Capacidade <= 0)
             return BadRequest("Capacidade deve ser maior que zero");
         
-        if (await _context.Salas.AnyAsync(s => s.Nome == salaAtualizada.Nome && s.Id != id))
+        if (_repository.VerificarSeNomeExisteComIdDiferente(salaAtualizada.Nome, id))
             return Conflict("Já existe uma sala com este nome");
 
-        sala.Nome = salaAtualizada.Nome;
-        sala.Capacidade = salaAtualizada.Capacidade;
+        salaExistente.Nome = salaAtualizada.Nome;
+        salaExistente.Capacidade = salaAtualizada.Capacidade;
 
-        await _context.SaveChangesAsync();
+        _repository.Atualizar(salaExistente);
 
-        return Ok(sala);
+        return Ok(salaExistente);
     }
 
     [HttpDelete("remover/{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Remover(int id){
-        var sala = await _context.Salas.FindAsync(id);
+    public IActionResult Remover(int id){
+        var sala = _repository.BuscarPorId(id);
         if (sala == null) 
             return NotFound("Sala não encontrada");
 
-        _context.Salas.Remove(sala);
-        await _context.SaveChangesAsync();
-            return Ok("Sala Deletada com sucesso");
+        _repository.Remover(id);
+        return Ok("Sala Deletada com sucesso");
     }
 
     [HttpGet("{id}")]
     [Authorize]
-    public async Task<IActionResult> Buscar (int id){
-        var sala = await _context.Salas.FindAsync(id);
+    public IActionResult Buscar (int id){
+        var sala = _repository.BuscarPorId(id);
         if (sala == null)
             return NotFound("Sala não encontrada");
         return Ok(sala);
