@@ -1,9 +1,10 @@
 using System;
 using API.data;
+using API.Repository;
 using API.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
-namespace API.Data;
+namespace API.Repository;
 
 public class SalaRepository : ISalaRepository
 {

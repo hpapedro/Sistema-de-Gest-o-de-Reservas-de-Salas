@@ -2,7 +2,7 @@ using System;
 using API.Models;
 using System.Collections.Generic;
 
-namespace API.Data;
+namespace API.Repository;
 
 public interface ISalaRepository
 {
