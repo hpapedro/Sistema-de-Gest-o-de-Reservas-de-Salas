@@ -8,9 +8,15 @@ POST {{url_base}}/usuarios/registrar
 Content-Type: application/json
 
 {
+<<<<<<< HEAD
     "Nome": "Yuri",
     "Email": "yuri1@email.com",
     "Senha": "12345",
+=======
+    "Nome": "Pedro",
+    "Email": "pedroaalves2000@gmail.com",
+    "Senha": "Mesmadesempre1!",
+>>>>>>> 1952537c749eb3fa0d66037598710cbe9cc47d8f
     "Role": "Admin"
 }
 
@@ -20,6 +26,11 @@ POST {{url_base}}/auth/login
 Content-Type: application/json
 
 {
+<<<<<<< HEAD
     "Email": "yuri1@email.com",
     "Senha": "12345"
+=======
+    "Email": "pedroaalves2000@gmail.com",
+    "Senha": "Mesmadesempre1!"
+>>>>>>> 1952537c749eb3fa0d66037598710cbe9cc47d8f
 }
