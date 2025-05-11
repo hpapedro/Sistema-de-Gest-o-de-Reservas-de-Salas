@@ -6,7 +6,7 @@ public class Auditoria
 {
     public int Id {get; set;}
     public string Acao {get; set;} = string.Empty;
-    public DateTime CridadoEm {get; set;} = DateTime.Now;
+    public DateTime CriadoEm {get; set;} = DateTime.Now;
 
     //Relacionamento com Reserva
     public int ReservaId {get; set;}

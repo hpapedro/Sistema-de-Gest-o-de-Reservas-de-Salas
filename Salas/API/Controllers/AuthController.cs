@@ -36,8 +36,9 @@ public class AuthController : ControllerBase{
         }
 
         return Ok(new {
-            message = "Login Bem sucessido",
+            message = "Login Bem sucedido",
             role = usuario.Role
+            
         });
         
     }

@@ -1,6 +1,8 @@
 using API.data;
 using API.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -66,5 +68,14 @@ public class SalasController : ControllerBase{
         _context.Salas.Remove(sala);
         await _context.SaveChangesAsync();
             return Ok("Sala Deletada com sucesso");
+    }
+
+    [HttpGet("{id}")]
+    [Authorize]
+    public async Task<IActionResult> Buscar (int id){
+        var sala = await _context.Salas.FindAsync(id);
+        if (sala == null)
+            return NotFound("Sala não encontrada");
+        return Ok(sala);
     }
 }

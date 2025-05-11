@@ -5,7 +5,9 @@ namespace API.Models;
 public class Reserva
 {
     public int Id {get; set;}
-    public DateTime DataReserva {get; set;}
+    public DateTime DataHoraInicio {get; set;}
+    
+    public DateTime DataHoraFim {get; set;}
 
     //CHAVES ESTRANGEIRAS
 
