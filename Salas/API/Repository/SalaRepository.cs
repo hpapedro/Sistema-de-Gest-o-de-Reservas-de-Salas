@@ -1,8 +1,6 @@
-using System;
 using API.data;
-using API.Repository;
 using API.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
 
 namespace API.Repository;
 
@@ -56,5 +54,6 @@ public class SalaRepository : ISalaRepository
     {
         return _context.Salas.Any(s => s.Nome.ToUpper() == nome.ToUpper() && s.Id != id);
     }
+    
 
 }

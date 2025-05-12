@@ -1,6 +1,6 @@
 @url_base = http://localhost:5000/api
 
-@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiUGVkcm8iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InBlZHJvYWFsdmVzMjAwMEBnbWFpbC5jb20iLCJleHAiOjE3NDcwMDU4NzMsImlzcyI6IlJlc2VydmFTYWxhc0FQSSIsImF1ZCI6IlVzdWFyaW9BUEkifQ.Qve2_b0tWXvS4Opniru-YRCo26OdcZ6ykr1HsZl-khk
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiVGVzdGUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFkbWluQGVtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMTciLCJleHAiOjE3NDcwMjU2MjgsImlzcyI6IlJlc2VydmFTYWxhc0FQSSIsImF1ZCI6IlVzdWFyaW9BUEkifQ.M5ZSedCA04pk1eIrOxqXK9lxd_njYKtilivHjaG0Gqs
 
 ### 1. Listar salas (SEM TOKEN - Público)
 GET {{url_base}}/salas/listar
@@ -11,7 +11,7 @@ Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
-    "Nome": "Sala Normal 5",
+    "Nome": "Sala Normal 71111",
     "Capacidade": 12
 }
 
@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ### BUSCAR SALA
-GET {{url_base}}/salas/2
+GET {{url_base}}/salas/1
 Authorization: Bearer {{adminToken}}
 
 ### 3. Deletar sala (EXIGE TOKEN ADMIN)

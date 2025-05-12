@@ -9,4 +9,6 @@ public interface IReservaRepository
     List<Reserva> ListarPorUsuarioId(int usuarioId);
     List<Reserva> ListarTodas();
     bool VerificarConflito( int salaId, DateTime dataInicio, DateTime dataFim);
+    Reserva? BuscarPorId(int id);
+    void Remover(int id);
 }

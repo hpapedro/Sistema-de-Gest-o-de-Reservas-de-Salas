@@ -14,13 +14,16 @@ namespace API.Controllers
     {
         private readonly IReservaRepository _reservaRepository;
         private readonly ISalaRepository _salaRepository;
+        private readonly IAuditoriaRepository _auditoriaRepository;
 
         public ReservaController(
             IReservaRepository reservaRepository, 
-            ISalaRepository salaRepository)
+            ISalaRepository salaRepository,
+            IAuditoriaRepository auditoriaRepository)
         {
             _reservaRepository = reservaRepository;
             _salaRepository = salaRepository;
+            _auditoriaRepository = auditoriaRepository;
         }
 
     private int GetUsuarioIdLogado()
@@ -77,7 +80,17 @@ namespace API.Controllers
             return Conflict ("Horario Indisponivel. Ja existe uma reserva nessa sala para esse mesmo periodo");
 
         }
+
              _reservaRepository.Adicionar(reservaParaCriar);
+
+            try
+            {
+                _auditoriaRepository.RegistrarCriacaoReserva(reservaParaCriar, usuarioId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Erro");
+            }
             return CreatedAtAction(null, new { id = reservaParaCriar.Id}, reservaParaCriar);
         }
 
@@ -112,6 +125,37 @@ namespace API.Controllers
     {
         var todasAsReservas = _reservaRepository.ListarTodas();
         return Ok(todasAsReservas);
+    }
+
+    [HttpDelete("Remover/{id}")]
+    [Authorize(Roles = "Admin")]
+    public IActionResult Remover(int id){
+        int usuarioIdLogado;
+        try
+        {
+            usuarioIdLogado = GetUsuarioIdLogado();
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine("Erro ao obter ID do usuario");
+            return Unauthorized("Nao foi possivel identificar o usuario para a acao.");
+        }
+
+        var reservaParaDeletar = _reservaRepository.BuscarPorId(id);
+        if (reservaParaDeletar == null)
+            return NotFound ("Reserva nao encontrada");
+
+        try
+            {
+                _auditoriaRepository.RegistrarCriacaoReserva(reservaParaDeletar, usuarioIdLogado);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Erro");
+            }
+
+        _reservaRepository.Remover(id);
+        return Ok(" Reserva Deletada com Sucesso");
     }
 
 }

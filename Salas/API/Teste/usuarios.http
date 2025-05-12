@@ -8,9 +8,9 @@ POST {{url_base}}/usuarios/registrar
 Content-Type: application/json
 
 {
-    "Nome": "Yuri",
-    "Email": "yuri21@email.com",
-    "Senha": "12345",
+    "Nome": "Teste",
+    "Email": "admin@email.com",
+    "Senha": "admin",
     "Role": "Admin"
 }
 
@@ -20,6 +20,6 @@ POST {{url_base}}/auth/login
 Content-Type: application/json
 
 {
-    "Email": "yuri21@email.com",
-    "Senha": "12345"
+    "Email": "admin@email.com",
+    "Senha": "admin"
 }

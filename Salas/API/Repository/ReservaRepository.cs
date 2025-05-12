@@ -1,4 +1,3 @@
-using System;
 using API.data;
 using API.Models;
 
@@ -48,5 +47,19 @@ bool existeConflito = _context.Reservas.Any(reservaExistente =>
 
 
             return existeConflito;
+    }
+
+    public void Remover (int id)
+    {
+        var reservaParaRemover = _context.Reservas.Find(id);
+        if (reservaParaRemover != null){
+            _context.Reservas.Remove(reservaParaRemover);
+            _context.SaveChanges();
+        }
+    }
+
+        public Reserva? BuscarPorId(int id)
+    {
+        return _context.Reservas.Find(id);
     }
 }

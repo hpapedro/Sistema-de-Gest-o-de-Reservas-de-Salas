@@ -13,6 +13,5 @@ public interface ISalaRepository
     void Atualizar(Sala sala);
     void Remover(int id);
     bool VerificarSeNomeExiste(string nome);
-    bool VerificarSeNomeExisteComIdDiferente(string nome, int id);
-    
+        bool VerificarSeNomeExisteComIdDiferente(string nome, int id);    
 }
