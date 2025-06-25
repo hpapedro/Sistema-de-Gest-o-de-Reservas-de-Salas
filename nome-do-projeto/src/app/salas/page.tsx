@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/services/api'; // sua instância axios configurada
+import api from '@/services/api';
 import { Sala } from '@/types/sala';
 
 import {
@@ -37,16 +37,14 @@ export default function SalasPage() {
 
     if (!token) {
       router.push('/login');
-    } else {
-      listarSalas(); // já lista ao abrir
     }
+    // Removido o auto listarSalas
   }, [router]);
 
   const listarSalas = async () => {
     try {
       const resposta = await fetch('http://localhost:5000/api/salas/listar');
       const dados = await resposta.json();
-      // tratando caso venha um objeto com $values (ex: Entity Framework)
       setSalas(Array.isArray(dados) ? dados : dados.$values || []);
       setErro('');
       setSalaUnica(null);
@@ -112,7 +110,6 @@ export default function SalasPage() {
     setCapacidade('');
   };
 
-  // Condição para mostrar os botões de criar, editar, buscar e deletar
   const podeEditar = role === 'admin';
 
   return (
@@ -123,7 +120,7 @@ export default function SalasPage() {
 
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
         <Button variant="contained" color="primary" onClick={listarSalas}>
-          Listar Salas (sem token)
+          Listar Salas
         </Button>
       </Box>
 

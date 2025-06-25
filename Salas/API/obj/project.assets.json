@@ -3011,19 +3011,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/pedroalves/.nuget/packages/": {}
+    "C:\\Users\\pedro\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/pedroalves/Desktop/Sistema-de-Gest-o-de-Reservas-de-Salas/Salas/API/API.csproj",
+      "projectUniqueName": "C:\\Users\\pedro\\Documents\\Sistema-de-Gest-o-de-Reservas-de-Salas\\Salas\\API\\API.csproj",
       "projectName": "API",
-      "projectPath": "/Users/pedroalves/Desktop/Sistema-de-Gest-o-de-Reservas-de-Salas/Salas/API/API.csproj",
-      "packagesPath": "/Users/pedroalves/.nuget/packages/",
-      "outputPath": "/Users/pedroalves/Desktop/Sistema-de-Gest-o-de-Reservas-de-Salas/Salas/API/obj/",
+      "projectPath": "C:\\Users\\pedro\\Documents\\Sistema-de-Gest-o-de-Reservas-de-Salas\\Salas\\API\\API.csproj",
+      "packagesPath": "C:\\Users\\pedro\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\pedro\\Documents\\Sistema-de-Gest-o-de-Reservas-de-Salas\\Salas\\API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/pedroalves/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\pedro\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -3094,7 +3094,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.409/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

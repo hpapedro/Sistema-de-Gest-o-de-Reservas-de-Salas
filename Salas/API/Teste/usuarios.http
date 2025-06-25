@@ -8,11 +8,22 @@ POST {{url_base}}/usuarios/registrar
 Content-Type: application/json
 
 {
-    "Nome": "Teste",
+    "Nome": "Pedro Alves",
+    "Email": "admin@email.com",
+    "Senha": "admin1234",
+    "Role": "Admin"
+}
+### REGISTRAR USUARIO USER
+POST {{url_base}}/usuarios/registrar
+Content-Type: application/json
+
+{
+    "Nome": "Pedro Alves",
     "Email": "user@email.com",
-    "Senha": "user",
+    "Senha": "user1234",
     "Role": "User"
 }
+
 
 ### LOGIN
 
@@ -20,6 +31,6 @@ POST {{url_base}}/auth/login
 Content-Type: application/json
 
 {
-    "Email": "user@email.com",
-    "Senha": "user"
+    "Email": "admin@email.com",
+    "Senha": "admin1234"
 }

@@ -26,74 +26,73 @@ namespace API.Controllers
             _auditoriaRepository = auditoriaRepository;
         }
 
-    private int GetUsuarioIdLogado()
-    {
-        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-        if (idClaim != null && int.TryParse(idClaim.Value, out int usuarioId))
-            return usuarioId;
-
-        throw new InvalidOperationException("Nao foi possivel obter o ID do usuario");
-    }
-
-    [HttpPost]
-    public IActionResult CriarReserva([FromBody] Reserva reservaParaCriar)
-    {
-        int usuarioId;
-        try
+        private int GetUsuarioIdLogado()
         {
-            usuarioId = GetUsuarioIdLogado();
+            var idClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (idClaim != null && int.TryParse(idClaim.Value, out int usuarioId))
+                return usuarioId;
+
+            throw new InvalidOperationException("Nao foi possivel obter o ID do usuario");
         }
-        catch (InvalidOperationException ex)
+
+        [HttpPost]
+        public IActionResult CriarReserva([FromBody] Reserva reservaParaCriar)
         {
-            return Unauthorized("Usuario nao autorizado");
-        }
+            int usuarioId;
+            try
+            {
+                usuarioId = GetUsuarioIdLogado();
+            }
+            catch (InvalidOperationException)
+            {
+                return Unauthorized("Usuario nao autorizado");
+            }
 
-        if (reservaParaCriar == null)
-        {
-            return BadRequest("Dados da reserva não fornecidos");
-        }   
+            if (reservaParaCriar == null)
+            {
+                return BadRequest("Dados da reserva não fornecidos");
+            }   
 
-        reservaParaCriar.Id = 0;
-        reservaParaCriar.UsuarioId = usuarioId;
+            reservaParaCriar.Id = 0;
+            reservaParaCriar.UsuarioId = usuarioId;
 
-        if (reservaParaCriar.SalaId <= 0)
-        {  
-            return BadRequest("ID da sala invalido");
-        }
+            if (reservaParaCriar.SalaId <= 0)
+            {  
+                return BadRequest("ID da sala invalido");
+            }
 
-        if (reservaParaCriar.DataHoraFim <= reservaParaCriar.DataHoraInicio)
-        {
-            return BadRequest("A data/hora fim da reserva deve ser posterior a data/hora de inicio");
-        }
+            if (reservaParaCriar.DataHoraFim <= reservaParaCriar.DataHoraInicio)
+            {
+                return BadRequest("A data/hora fim da reserva deve ser posterior a data/hora de inicio");
+            }
 
-        if (reservaParaCriar.DataHoraInicio < DateTime.Now){
-            return BadRequest("A data/hora de inicio da reserva deve ser posterior a data atual");
-        }
+            if (reservaParaCriar.DataHoraInicio < DateTime.Now){
+                return BadRequest("A data/hora de inicio da reserva deve ser posterior a data atual");
+            }
 
-        var salaExistente = _salaRepository.BuscarPorId(reservaParaCriar.SalaId);
-        if (salaExistente == null)
-        {
-            return NotFound($"Sala com o ID {reservaParaCriar.SalaId} nao encontrado");
-        }
+            var salaExistente = _salaRepository.BuscarPorId(reservaParaCriar.SalaId);
+            if (salaExistente == null)
+            {
+                return NotFound($"Sala com o ID {reservaParaCriar.SalaId} nao encontrado");
+            }
 
-        if (_reservaRepository.VerificarConflito(reservaParaCriar.SalaId, reservaParaCriar.DataHoraInicio, reservaParaCriar.DataHoraFim)){
-            return Conflict ("Horario Indisponivel. Ja existe uma reserva nessa sala para esse mesmo periodo");
+            if (_reservaRepository.VerificarConflito(reservaParaCriar.SalaId, reservaParaCriar.DataHoraInicio, reservaParaCriar.DataHoraFim))
+            {
+                return Conflict("Horario Indisponivel. Ja existe uma reserva nessa sala para esse mesmo periodo");
+            }
 
-        }
-
-             _reservaRepository.Adicionar(reservaParaCriar);
+            _reservaRepository.Adicionar(reservaParaCriar);
 
             try
             {
                 _auditoriaRepository.RegistrarCriacaoReserva(reservaParaCriar, usuarioId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine("Erro");
+                Console.WriteLine("Erro ao registrar auditoria de criação");
             }
-            return CreatedAtAction(null, new { id = reservaParaCriar.Id}, reservaParaCriar);
+            return CreatedAtAction(null, new { id = reservaParaCriar.Id }, reservaParaCriar);
         }
-
 
         [HttpGet("minhas")]
         public ActionResult<List<Reserva>> ListarMinhasReservas()
@@ -103,7 +102,7 @@ namespace API.Controllers
             {
                 usuarioId = GetUsuarioIdLogado();
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 return Unauthorized("Usuario nao autorizado");
             }
@@ -112,51 +111,54 @@ namespace API.Controllers
 
             if (minhasReservas == null || !minhasReservas.Any())
             {
-                return Ok ("Voce ainda nao possui nenhuma reserva");
+                return Ok("Voce ainda nao possui nenhuma reserva");
             }
 
-            return Ok (minhasReservas);
-
+            return Ok(minhasReservas);
         }
 
-    [HttpGet]
-    [Authorize(Roles = "Admin")] 
-    public ActionResult<List<Reserva>> ListarTodas() 
+        [HttpGet]
+        [Authorize(Roles = "Admin")] 
+        public ActionResult<List<Reserva>> ListarTodas() 
+        {
+            var todasAsReservas = _reservaRepository.ListarTodas();
+            return Ok(todasAsReservas);
+        }
+
+[HttpDelete("Remover/{id}")]
+[Authorize(Roles = "Admin")]
+public IActionResult Remover(int id)
+{
+    try
     {
-        var todasAsReservas = _reservaRepository.ListarTodas();
-        return Ok(todasAsReservas);
-    }
-
-    [HttpDelete("Remover/{id}")]
-    [Authorize(Roles = "Admin")]
-    public IActionResult Remover(int id){
-        int usuarioIdLogado;
-        try
-        {
-            usuarioIdLogado = GetUsuarioIdLogado();
-        }
-        catch (InvalidOperationException ex)
-        {
-            Console.WriteLine("Erro ao obter ID do usuario");
-            return Unauthorized("Nao foi possivel identificar o usuario para a acao.");
-        }
+        int usuarioIdLogado = GetUsuarioIdLogado();
 
         var reservaParaDeletar = _reservaRepository.BuscarPorId(id);
         if (reservaParaDeletar == null)
-            return NotFound ("Reserva nao encontrada");
+            return NotFound("Reserva nao encontrada");
 
         try
-            {
-                _auditoriaRepository.RegistrarCriacaoReserva(reservaParaDeletar, usuarioIdLogado);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Erro");
-            }
+        {
+            _auditoriaRepository.RegistrarExclusaoReserva(reservaParaDeletar, usuarioIdLogado);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Erro na auditoria: {e.Message}");
+        }
 
         _reservaRepository.Remover(id);
-        return Ok(" Reserva Deletada com Sucesso");
-    }
 
+        return Ok("Reserva Deletada com Sucesso");
+    }
+catch (Exception ex)
+{
+    string mensagemErro = ex.Message;
+    if (ex.InnerException != null)
+        mensagemErro += " | Inner: " + ex.InnerException.Message;
+
+    return StatusCode(500, $"Erro inesperado: {mensagemErro}");
 }
+}
+
+    }
 }

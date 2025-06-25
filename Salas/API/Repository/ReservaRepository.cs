@@ -1,5 +1,6 @@
 using API.data;
 using API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repository;
 
@@ -14,7 +15,7 @@ public class ReservaRepository : IReservaRepository
     public void Adicionar(Reserva reserva)
     {
         if (reserva == null)
-        throw new ArgumentNullException(nameof(reserva), "A Sala nao pode ser vazia");
+            throw new ArgumentNullException(nameof(reserva), "A Sala nao pode ser vazia");
 
         _context.Reservas.Add(reserva);
         _context.SaveChanges();
@@ -23,7 +24,7 @@ public class ReservaRepository : IReservaRepository
     public List<Reserva> ListarPorUsuarioId(int usuarioId)
     {
         return _context.Reservas
-                            .Where (r => r.UsuarioId == usuarioId)
+                            .Where(r => r.UsuarioId == usuarioId)
                             .ToList();
     }
 
@@ -39,27 +40,38 @@ public class ReservaRepository : IReservaRepository
             return false;
         }
 
-bool existeConflito = _context.Reservas.Any(reservaExistente =>
-    reservaExistente.SalaId == salaId &&                  
-    reservaExistente.DataHoraInicio < dataFim &&      
-    reservaExistente.DataHoraFim > dataInicio            
-);
+        bool existeConflito = _context.Reservas.Any(reservaExistente =>
+            reservaExistente.SalaId == salaId &&
+            reservaExistente.DataHoraInicio < dataFim &&
+            reservaExistente.DataHoraFim > dataInicio
+        );
 
 
-            return existeConflito;
+        return existeConflito;
     }
 
-    public void Remover (int id)
+public void Remover(int id)
+{
+    // Primeiro, remover auditorias relacionadas à reserva
+    var auditoriasRelacionadas = _context.Auditorias.Where(a => a.ReservaId == id);
+    _context.Auditorias.RemoveRange(auditoriasRelacionadas);
+
+    // Depois, remover a reserva
+    var reservaParaRemover = _context.Reservas.Find(id);
+    if (reservaParaRemover != null)
     {
-        var reservaParaRemover = _context.Reservas.Find(id);
-        if (reservaParaRemover != null){
-            _context.Reservas.Remove(reservaParaRemover);
-            _context.SaveChanges();
-        }
+        _context.Reservas.Remove(reservaParaRemover);
     }
 
-        public Reserva? BuscarPorId(int id)
-    {
-        return _context.Reservas.Find(id);
-    }
+    _context.SaveChanges();
 }
+
+
+public Reserva? BuscarPorId(int id)
+{
+    return _context.Reservas
+        .Include(r => r.Sala)
+        .FirstOrDefault(r => r.Id == id);
+}
+}
+
